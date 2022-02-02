@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import { CanvasProps } from './Canvas';
+import { Captions } from '../types';
 
 interface FormProps extends CanvasProps {
   handleDownload: (event: any) => void;
@@ -18,16 +19,49 @@ const Form: React.FC<FormProps> = ({
   selectRandomMeme,
   handleDownload,
 }) => {
+  const handleChange = (event: any, type: string) => {
+    const key: string = type;
+    switch (key) {
+      case 'topCaption':
+        // @ts-ignore
+        setCaptions((prevState: Captions) => ({
+          ...prevState,
+          topCaption: {
+            ...prevState?.topCaption,
+            text: event.target.value,
+          },
+        }));
+        break;
+      case 'bottomCaption':
+        // @ts-ignore
+        setCaptions((prevState: Captions) => ({
+          ...prevState,
+          bottomCaption: {
+            ...prevState?.bottomCaption,
+            text: event.target.value,
+          },
+        }));
+        break;
+    }
+  };
   return (
     <Box>
       <Box>
-        <TextField id='outlined-basic' label='Top Caption' variant='outlined' />
+        <TextField
+          id={captions?.topCaption.id}
+          value={captions?.topCaption.text}
+          label='Top Caption'
+          variant='outlined'
+          onChange={(e) => handleChange(e, 'topCaption')}
+        />
       </Box>
       <Box>
         <TextField
-          id='outlined-basic'
+          id={captions?.bottomCaption.id}
+          value={captions?.bottomCaption.text}
           label='Bottom Caption'
           variant='outlined'
+          onChange={(e) => handleChange(e, 'bottomCaption')}
         />
       </Box>
       <Box>
@@ -39,10 +73,20 @@ const Form: React.FC<FormProps> = ({
         </Tooltip>
       </Box>
       <Box>
-        <Button variant='contained' startIcon={<ShuffleIcon />}>
+        <Button
+          variant='contained'
+          startIcon={<ShuffleIcon />}
+          onClick={() => {
+            memes && selectRandomMeme(memes);
+          }}
+        >
           Change Meme
         </Button>
-        <Button variant='contained' startIcon={<DownloadIcon />}>
+        <Button
+          variant='contained'
+          startIcon={<DownloadIcon />}
+          onClick={handleDownload}
+        >
           Download
         </Button>
       </Box>

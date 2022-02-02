@@ -1,8 +1,17 @@
 import React from 'react';
 import { getMemes } from '../api';
 import { Meme, Captions, MemeImage } from '../types';
-import { getRandomIndex } from '../utils';
-import Canvas from './Canvas';
+import {
+  defaultBottomCaption,
+  defaultTopCaption,
+  getRandomIndex,
+} from '../utils';
+import dynamic from 'next/dynamic';
+import { Grid } from '@mui/material';
+
+const Canvas = dynamic(() => import('./Canvas'), {
+  ssr: false,
+});
 
 const MemeComponent = () => {
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -25,6 +34,10 @@ const MemeComponent = () => {
       url: randomMeme.url,
       image: image,
     });
+    setCaptions({
+      topCaption: defaultTopCaption,
+      bottomCaption: defaultBottomCaption,
+    });
   };
 
   const fetchMemes = async () => {
@@ -42,14 +55,22 @@ const MemeComponent = () => {
   if (loading) return <h1>Loading...</h1>;
 
   return (
-    <Canvas
-      memes={memes}
-      memeImage={memeImage}
-      setMemeImage={setMemeImage}
-      captions={captions}
-      setCaptions={setCaptions}
-      selectRandomMeme={selectRandomMeme}
-    />
+    <Grid container>
+      <Grid item xs={12}>
+        <Grid container justifyContent='center' alignItems='center'>
+          <Grid item>
+            <Canvas
+              memes={memes}
+              memeImage={memeImage}
+              setMemeImage={setMemeImage}
+              captions={captions}
+              setCaptions={setCaptions}
+              selectRandomMeme={selectRandomMeme}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 

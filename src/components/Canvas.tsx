@@ -1,8 +1,9 @@
 import React from 'react';
-import Text from './Text';
-import { Stage, Layer, Image } from 'react-konva';
+import { Stage, Layer, Image, Text } from 'react-konva';
 import Form from './Form';
 import { Meme, MemeImage, Captions } from '../types';
+import { Box } from '@mui/system';
+import { Grid } from '@mui/material';
 
 export interface CanvasProps {
   memes: Meme[] | undefined;
@@ -24,41 +25,53 @@ const Canvas: React.FC<CanvasProps> = ({
   const layerRef = React.useRef(null);
   const stageRef = React.useRef(null);
 
-  const handleExport = (event: any) => {
+  const handledownload = (event: any) => {
     event.preventDefault();
-    // const uri = stageRef.current.toDataURL();
-    // var link = document.createElement('a');
-    // link.download = 'meme.png';
-    // link.href = uri;
-    // link.click();
+    // @ts-ignore
+    const url = stageRef.current.toDataURL();
+    const link = document.createElement('a');
+    link.download = 'meme.png';
+    link.href = url;
+    link.click();
   };
-
   return (
-    <div className='memeRoot'>
-      <Form
-        memes={memes}
-        memeImage={memeImage}
-        setMemeImage={setMemeImage}
-        captions={captions}
-        setCaptions={setCaptions}
-        selectRandomMeme={selectRandomMeme}
-        handleDownload={handleExport}
-      />
-      <div className='canvas inverted'>
-        <Stage
-          width={memeImage?.width}
-          height={memeImage?.height}
-          ref={stageRef}
-          onContentMouseover
-        >
-          <Layer ref={layerRef}>
-            <Image x={0} y={0} image={memeImage?.image} alt='meme-image' />
-            <Text shapeProps={captions?.topCaption} />
-            <Text shapeProps={captions?.bottomCaption} />
-          </Layer>
-        </Stage>
-      </div>
-    </div>
+    <Grid container spacing={2} justifyContent='center' alignItems='center'>
+      <Grid item xs={4}>
+        <Form
+          memes={memes}
+          memeImage={memeImage}
+          setMemeImage={setMemeImage}
+          captions={captions}
+          setCaptions={setCaptions}
+          selectRandomMeme={selectRandomMeme}
+          handleDownload={handledownload}
+        />
+      </Grid>
+      <Grid item xs={8}>
+        <Box>
+          <Stage
+            width={memeImage?.width}
+            height={memeImage?.height}
+            ref={stageRef}
+            onContentMouseover
+          >
+            <Layer ref={layerRef}>
+              <Image x={0} y={0} image={memeImage?.image} alt='meme-image' />
+              <Text
+                {...captions?.topCaption}
+                fillAfterStrokeEnabled
+                strokeScaleEnabled={false}
+              />
+              <Text
+                {...captions?.bottomCaption}
+                fillAfterStrokeEnabled
+                strokeScaleEnabled={false}
+              />
+            </Layer>
+          </Stage>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
