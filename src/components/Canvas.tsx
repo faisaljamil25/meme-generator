@@ -54,7 +54,7 @@ const Canvas: React.FC<CanvasProps> = ({
         md={8}
         justifyContent='center'
         alignItems='center'
-        style={{ overflowX: 'hidden' }}
+        // style={{ overflowX: 'hidden' }}
       >
         <Stage
           width={memeImage?.width}
