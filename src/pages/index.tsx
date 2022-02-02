@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
-import { Button, Grid, Box } from '@mui/material';
+import { Button, Grid, Box, Typography } from '@mui/material';
 import { googleLogin } from '../firebase/googleLogin';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import { guestLogin } from '../firebase/guestLogin';
 
 const useStyles = makeStyles((theme: Theme) => ({
   home: {
@@ -14,26 +15,40 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundSize: 'cover',
   },
 }));
+
 const Index: NextPage = () => {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Grid container className={classes.home}>
-      <Grid item xs={12}>
-        <Box mt={4}>
-          <h1 style={{ textAlign: 'center' }}>MEME GENERATOR</h1>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container justifyContent='center' alignItems='center'>
-          <Box mt={-40}>
-            <Button variant='contained' onClick={() => googleLogin(router)}>
+    <Box className={classes.home}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} mb={10}>
+          <Typography variant='h4' align='center' mt={4} gutterBottom>
+            MEME GENERATOR
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Box display='flex' justifyContent='center' mb={2}>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => googleLogin(router)}
+            >
               Google Login
+            </Button>
+          </Box>
+          <Box display='flex' justifyContent='center'>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => guestLogin(router)}
+            >
+              Guest Login
             </Button>
           </Box>
         </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 

@@ -14,11 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface HomePageProps {
-  token: string;
-}
-
-const Home: NextPage<HomePageProps> = ({ token }) => {
+const Home: NextPage = () => {
   const classes = useStyles();
   const router = useRouter();
   return (
@@ -65,8 +61,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   }
 
   return {
-    props: {
-      token,
-    },
+    props: {},
   };
 };
