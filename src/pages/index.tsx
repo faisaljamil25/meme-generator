@@ -5,6 +5,8 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { guestLogin } from '../firebase/guestLogin';
+import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) => ({
   home: {
@@ -17,8 +19,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const Index: NextPage = () => {
+  const [loading, setLoading] = React.useState<boolean>(true);
   const router = useRouter();
   const classes = useStyles();
+
+  React.useEffect(() => setLoading(false), []);
+
+  if (loading) return <CircularProgress color='secondary' />;
+
   return (
     <Box className={classes.home}>
       <Grid container spacing={2}>

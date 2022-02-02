@@ -4,9 +4,10 @@ import nookies from 'nookies';
 import Meme from '../components/Meme';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Box, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -15,33 +16,45 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const Home: NextPage = () => {
-  const classes = useStyles();
+  const [loading, setLoading] = React.useState<boolean>(true);
   const router = useRouter();
-  return (
-    <Grid
-      container
-      className={classes.root}
-      direction='row'
-      justifyContent='space-around'
-      alignItems='center'
-    >
-      <h1>Meme Generator</h1>
-      <Button
-        variant='contained'
-        onClick={() => {
-          Cookies.remove('token');
-          router.push('/');
-        }}
-      >
-        Logout
-      </Button>
-      <Grid item xs={12}></Grid>
-      <Grid item xs={12}></Grid>
+  const classes = useStyles();
 
-      <Grid item xs={12}>
-        <Meme />
+  React.useEffect(() => setLoading(false), []);
+
+  if (loading) return <CircularProgress color='secondary' />;
+
+  return (
+    <Box className={classes.root}>
+      <Grid container>
+        <Grid
+          item
+          container
+          alignItems='center'
+          justifyContent='space-around'
+          xs={12}
+          mt={2}
+          mb={4}
+        >
+          <Typography variant='h4' align='center'>
+            Meme Generator
+          </Typography>
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={() => {
+              Cookies.remove('token');
+              router.push('/');
+            }}
+          >
+            Logout
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Meme />
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 

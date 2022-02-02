@@ -8,7 +8,7 @@ import {
   getSize,
 } from '../utils';
 import dynamic from 'next/dynamic';
-import { Grid } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Canvas = dynamic(() => import('./Canvas'), {
   ssr: false,
@@ -24,7 +24,7 @@ const MemeComponent = () => {
     if (memes.length === 0) return;
     const randomMeme = memes[getRandomIndex(memes.length)];
     const image = new Image();
-    const maxHeight = Math.floor(window.innerHeight * 0.8);
+    const maxHeight = Math.floor(window.innerHeight * 0.6);
     const { newWidth, newHeight } = getSize(
       randomMeme.width,
       randomMeme.height,
@@ -58,21 +58,17 @@ const MemeComponent = () => {
     fetchMemes().catch(console.error);
   }, []);
 
-  if (loading) return <h1>Loading...</h1>;
+  if (loading) return <CircularProgress color='secondary' />;
 
   return (
-    <Grid container justifyContent='center' alignItems='center'>
-      <Grid item xs={12}>
-        <Canvas
-          memes={memes}
-          memeImage={memeImage}
-          setMemeImage={setMemeImage}
-          captions={captions}
-          setCaptions={setCaptions}
-          selectRandomMeme={selectRandomMeme}
-        />
-      </Grid>
-    </Grid>
+    <Canvas
+      memes={memes}
+      memeImage={memeImage}
+      setMemeImage={setMemeImage}
+      captions={captions}
+      setCaptions={setCaptions}
+      selectRandomMeme={selectRandomMeme}
+    />
   );
 };
 
