@@ -34,7 +34,7 @@ const Home: NextPage = () => {
           justifyContent='space-around'
           xs={12}
           mt={2}
-          mb={4}
+          mb={10}
         >
           <Typography variant='h4' align='center'>
             Meme Generator

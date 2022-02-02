@@ -54,7 +54,7 @@ const Form: React.FC<FormProps> = ({
   };
 
   return (
-    <Grid container justifyContent='center' alignItems='center'>
+    <Grid container justifyContent='center'>
       <Grid item xs={10} mt={4}>
         {/* <Box mb={4} display='flex' justifyContent='center'>
           <Typography variant='h5' align='center' mt={4} gutterBottom>

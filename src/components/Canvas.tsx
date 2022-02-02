@@ -35,7 +35,7 @@ const Canvas: React.FC<CanvasProps> = ({
   };
 
   return (
-    <Grid container alignItems='center' justifyContent='center'>
+    <Grid container justifyContent='center'>
       <Grid item xs={12} md={4}>
         <Form
           memes={memes}
@@ -54,7 +54,7 @@ const Canvas: React.FC<CanvasProps> = ({
         md={8}
         justifyContent='center'
         alignItems='center'
-        style={{ overflow: 'hidden' }}
+        style={{ overflowX: 'hidden' }}
       >
         <Stage
           width={memeImage?.width}
@@ -63,7 +63,7 @@ const Canvas: React.FC<CanvasProps> = ({
           }
           ref={stageRef}
           onContentMouseover
-          style={{ minHeight: '600px' }}
+          style={{ minHeight: '700px' }}
         >
           <Layer ref={layerRef}>
             <Image
