@@ -1,57 +1,63 @@
 import React from 'react';
-import { getMemes } from '../api';
-import { getRandomIndex, imageLoader } from '../utils/getRandomIndex';
-import Image from 'next/image';
+import Text from './Text';
+import { Stage, Layer, Image } from 'react-konva';
+import Form from './Form';
+import { Meme, MemeImage, Captions } from '../types';
 
-export interface Meme {
-  id: string;
-  name: string;
-  url: string;
-  width: number;
-  height: number;
-  box_count: number;
+export interface CanvasProps {
+  memes: Meme[] | undefined;
+  memeImage: MemeImage | undefined;
+  setMemeImage: React.Dispatch<React.SetStateAction<MemeImage | undefined>>;
+  captions: Captions | undefined;
+  setCaptions: React.Dispatch<React.SetStateAction<Captions | undefined>>;
+  selectRandomMeme: (memes: Meme[]) => void;
 }
 
-const Canvas = () => {
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [memes, setMemes] = React.useState<Meme[]>([]);
-  const [currentMeme, setCurrentMeme] = React.useState<Meme | null>(null);
+const Canvas: React.FC<CanvasProps> = ({
+  memes,
+  memeImage,
+  setMemeImage,
+  captions,
+  setCaptions,
+  selectRandomMeme,
+}) => {
+  const layerRef = React.useRef(null);
+  const stageRef = React.useRef(null);
 
-  const selectRandomImage = (memes: Meme[]) => {
-    if (memes.length === 0) {
-      console.log('null value');
-      return;
-    }
-    const randomMeme = memes[getRandomIndex(memes.length)];
-    setCurrentMeme(randomMeme);
+  const handleExport = (event: any) => {
+    event.preventDefault();
+    // const uri = stageRef.current.toDataURL();
+    // var link = document.createElement('a');
+    // link.download = 'meme.png';
+    // link.href = uri;
+    // link.click();
   };
 
-  const fetchMemes = async () => {
-    const { data } = await getMemes();
-    const res = data.data.memes;
-    setMemes(res);
-    selectRandomImage(res);
-    setLoading(false);
-  };
-
-  React.useEffect(() => {
-    fetchMemes().catch(console.error);
-  }, []);
-
-  if (loading) return <h1>Loading...</h1>;
   return (
-    <div>
-      <button onClick={() => selectRandomImage(memes)}>Select Random</button>
-      {currentMeme && (
-        <Image
-          loader={imageLoader}
-          src={currentMeme.url}
-          width={currentMeme.width}
-          height={currentMeme.height}
-          alt={currentMeme.name}
-          unoptimized={true}
-        />
-      )}
+    <div className='memeRoot'>
+      <Form
+        memes={memes}
+        memeImage={memeImage}
+        setMemeImage={setMemeImage}
+        captions={captions}
+        setCaptions={setCaptions}
+        selectRandomMeme={selectRandomMeme}
+        handleDownload={handleExport}
+      />
+      <div className='canvas inverted'>
+        <Stage
+          width={memeImage?.width}
+          height={memeImage?.height}
+          ref={stageRef}
+          onContentMouseover
+        >
+          <Layer ref={layerRef}>
+            <Image x={0} y={0} image={memeImage?.image} alt='meme-image' />
+            <Text shapeProps={captions?.topCaption} />
+            <Text shapeProps={captions?.bottomCaption} />
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 };
