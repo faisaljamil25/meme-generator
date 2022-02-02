@@ -1,26 +1,35 @@
-import type { NextPage } from 'next';
-import Meme from '../components/Meme';
+import { NextPage } from 'next';
+import { Button, Grid, Box } from '@mui/material';
+import { googleLogin } from '../firebase/googleLogin';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Grid } from '@mui/material';
+import { useRouter } from 'next/router';
+
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+  home: {
     minHeight: '100vh',
+    backgroundColor: '#ffffff',
+    backgroundImage: `url('/bg.svg')`,
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
   },
 }));
-
-const Home: NextPage = () => {
+const Index: NextPage = () => {
+  const router = useRouter();
   const classes = useStyles();
   return (
-    <Grid container className={classes.root}>
+    <Grid container className={classes.home}>
       <Grid item xs={12}>
-        <h1 style={{ textAlign: 'center' }}>Meme Generator</h1>
-      </Grid>
-      <Grid item xs={12}>
-        <Meme />
+        <Grid container justifyContent='center' alignItems='center'>
+          <Box mt={10}>
+            <Button variant='contained' onClick={() => googleLogin(router)}>
+              Google Login
+            </Button>
+          </Box>
+        </Grid>
       </Grid>
     </Grid>
   );
 };
 
-export default Home;
+export default Index;
