@@ -20,8 +20,13 @@ const Index: NextPage = () => {
   return (
     <Grid container className={classes.home}>
       <Grid item xs={12}>
+        <Box mt={4}>
+          <h1 style={{ textAlign: 'center' }}>MEME GENERATOR</h1>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
         <Grid container justifyContent='center' alignItems='center'>
-          <Box mt={10}>
+          <Box mt={-40}>
             <Button variant='contained' onClick={() => googleLogin(router)}>
               Google Login
             </Button>
