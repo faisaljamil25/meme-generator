@@ -3,8 +3,21 @@ import { Button, TextField, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
+import { CanvasProps } from './Canvas';
 
-const Form = () => {
+interface FormProps extends CanvasProps {
+  handleDownload: (event: any) => void;
+}
+
+const Form: React.FC<FormProps> = ({
+  memes,
+  memeImage,
+  setMemeImage,
+  captions,
+  setCaptions,
+  selectRandomMeme,
+  handleDownload,
+}) => {
   return (
     <Box>
       <Box>
