@@ -5,6 +5,7 @@ import {
   defaultBottomCaption,
   defaultTopCaption,
   getRandomIndex,
+  getSize,
 } from '../utils';
 import dynamic from 'next/dynamic';
 import { Grid } from '@mui/material';
@@ -23,14 +24,19 @@ const MemeComponent = () => {
     if (memes.length === 0) return;
     const randomMeme = memes[getRandomIndex(memes.length)];
     const image = new Image();
+    const maxHeight = Math.floor(window.innerHeight * 0.8);
+    const { newWidth, newHeight } = getSize(
+      randomMeme.width,
+      randomMeme.height,
+      maxHeight
+    );
     image.src = randomMeme.url;
     image.crossOrigin = 'anonymous';
     setMemeImage({
       id: randomMeme.id,
       name: randomMeme.name,
-      width: randomMeme.width,
-      height: randomMeme.height,
-      maxHeight: randomMeme.height,
+      width: newWidth,
+      height: newHeight,
       url: randomMeme.url,
       image: image,
     });
@@ -55,20 +61,16 @@ const MemeComponent = () => {
   if (loading) return <h1>Loading...</h1>;
 
   return (
-    <Grid container>
+    <Grid container justifyContent='center' alignItems='center'>
       <Grid item xs={12}>
-        <Grid container justifyContent='center' alignItems='center'>
-          <Grid item>
-            <Canvas
-              memes={memes}
-              memeImage={memeImage}
-              setMemeImage={setMemeImage}
-              captions={captions}
-              setCaptions={setCaptions}
-              selectRandomMeme={selectRandomMeme}
-            />
-          </Grid>
-        </Grid>
+        <Canvas
+          memes={memes}
+          memeImage={memeImage}
+          setMemeImage={setMemeImage}
+          captions={captions}
+          setCaptions={setCaptions}
+          selectRandomMeme={selectRandomMeme}
+        />
       </Grid>
     </Grid>
   );

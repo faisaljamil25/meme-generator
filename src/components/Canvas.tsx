@@ -2,9 +2,16 @@ import React from 'react';
 import { Stage, Layer, Image, Text } from 'react-konva';
 import Form from './Form';
 import { Meme, MemeImage, Captions } from '../types';
-import { Box } from '@mui/system';
 import { Grid } from '@mui/material';
-
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
+const useStyles = makeStyles((theme: Theme) => ({
+  meme: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexGrow: 1,
+  },
+}));
 export interface CanvasProps {
   memes: Meme[] | undefined;
   memeImage: MemeImage | undefined;
@@ -24,7 +31,7 @@ const Canvas: React.FC<CanvasProps> = ({
 }) => {
   const layerRef = React.useRef(null);
   const stageRef = React.useRef(null);
-
+  const classes = useStyles();
   const handledownload = (event: any) => {
     event.preventDefault();
     // @ts-ignore
@@ -35,8 +42,14 @@ const Canvas: React.FC<CanvasProps> = ({
     link.click();
   };
   return (
-    <Grid container spacing={2} justifyContent='center' alignItems='center'>
-      <Grid item xs={4}>
+    <Grid
+      container
+      spacing={2}
+      justifyContent='center'
+      alignItems='center'
+      className={classes.meme}
+    >
+      <Grid item xs={12} md={4}>
         <Form
           memes={memes}
           memeImage={memeImage}
@@ -47,29 +60,37 @@ const Canvas: React.FC<CanvasProps> = ({
           handleDownload={handledownload}
         />
       </Grid>
-      <Grid item xs={8}>
-        <Box>
-          <Stage
-            width={memeImage?.width}
-            height={memeImage?.height}
-            ref={stageRef}
-            onContentMouseover
-          >
-            <Layer ref={layerRef}>
-              <Image x={0} y={0} image={memeImage?.image} alt='meme-image' />
-              <Text
-                {...captions?.topCaption}
-                fillAfterStrokeEnabled
-                strokeScaleEnabled={false}
-              />
-              <Text
-                {...captions?.bottomCaption}
-                fillAfterStrokeEnabled
-                strokeScaleEnabled={false}
-              />
-            </Layer>
-          </Stage>
-        </Box>
+      <Grid item xs={12} md={8}>
+        <Grid
+          container
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <Grid item>
+            <Stage
+              width={memeImage?.width}
+              height={memeImage?.height}
+              ref={stageRef}
+              onContentMouseover
+              style={{ minHeight: '600px' }}
+            >
+              <Layer ref={layerRef}>
+                <Image x={0} y={0} image={memeImage?.image} alt='meme-image' />
+                <Text
+                  {...captions?.topCaption}
+                  fillAfterStrokeEnabled
+                  strokeScaleEnabled={false}
+                />
+                <Text
+                  {...captions?.bottomCaption}
+                  fillAfterStrokeEnabled
+                  strokeScaleEnabled={false}
+                />
+              </Layer>
+            </Stage>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

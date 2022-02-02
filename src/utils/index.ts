@@ -2,15 +2,16 @@ export const getRandomIndex = (length: number) => {
   return Math.floor(Math.random() * length);
 };
 
-interface LoaderProps {
-  src: string;
-}
-
-export const imageLoader = ({ src }: LoaderProps) => {
-  const relativeSrc = (src: string) => src.split('/').pop();
-  return `https://i.imgflip.com/${relativeSrc(src)}`;
+export const getSize = (width: number, height: number, maxHeight: number) => {
+  let newHeight = height;
+  let newWidth = width;
+  if (height > maxHeight) {
+    let ratio = maxHeight / height;
+    newWidth = width * ratio;
+    newHeight = maxHeight;
+  }
+  return { newWidth, newHeight };
 };
-
 export const defaultTopCaption = {
   id: '0',
   text: '',
@@ -18,8 +19,8 @@ export const defaultTopCaption = {
   stroke: '#FFFFFF',
   strokeWidth: 1,
   fontSize: 30,
-  positionX: 0,
-  positionY: 0,
+  x: 100,
+  y: 50,
 };
 
 export const defaultBottomCaption = {
@@ -29,6 +30,6 @@ export const defaultBottomCaption = {
   stroke: '#FFFFFF',
   strokeWidth: 1,
   fontSize: 30,
-  positionX: 10000,
-  positionY: 100000,
+  x: 100,
+  y: 375,
 };

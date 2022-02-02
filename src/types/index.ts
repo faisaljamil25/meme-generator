@@ -12,7 +12,6 @@ export interface MemeImage {
   name: string;
   width: number;
   height: number;
-  maxHeight: number;
   url: string;
   image: HTMLImageElement;
 }
@@ -24,8 +23,8 @@ export interface Caption {
   stroke: string;
   strokeWidth: number;
   fontSize: number;
-  positionX: number;
-  positionY: number;
+  x: number;
+  y: number;
 }
 
 export interface Captions {

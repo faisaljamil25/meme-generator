@@ -45,8 +45,8 @@ const Form: React.FC<FormProps> = ({
     }
   };
   return (
-    <Box>
-      <Box>
+    <Box ml={10}>
+      <Box mb={4}>
         <TextField
           id={captions?.topCaption.id}
           value={captions?.topCaption.text}
@@ -55,7 +55,7 @@ const Form: React.FC<FormProps> = ({
           onChange={(e) => handleChange(e, 'topCaption')}
         />
       </Box>
-      <Box>
+      <Box mb={4}>
         <TextField
           id={captions?.bottomCaption.id}
           value={captions?.bottomCaption.text}
@@ -64,31 +64,35 @@ const Form: React.FC<FormProps> = ({
           onChange={(e) => handleChange(e, 'bottomCaption')}
         />
       </Box>
-      <Box>
+      {/* <Box>
         <Tooltip title='Text Color' placement='top-start' arrow>
           <input type='color' name='Text Color' />
         </Tooltip>
         <Tooltip title='Border Color' placement='top-start' arrow>
           <input type='color' name='Border Color' />
         </Tooltip>
-      </Box>
+      </Box> */}
       <Box>
-        <Button
-          variant='contained'
-          startIcon={<ShuffleIcon />}
-          onClick={() => {
-            memes && selectRandomMeme(memes);
-          }}
-        >
-          Change Meme
-        </Button>
-        <Button
-          variant='contained'
-          startIcon={<DownloadIcon />}
-          onClick={handleDownload}
-        >
-          Download
-        </Button>
+        <Box mb={2}>
+          <Button
+            variant='contained'
+            startIcon={<ShuffleIcon />}
+            onClick={() => {
+              memes && selectRandomMeme(memes);
+            }}
+          >
+            Change Meme
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            variant='contained'
+            startIcon={<DownloadIcon />}
+            onClick={handleDownload}
+          >
+            Download
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
