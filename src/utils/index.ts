@@ -20,7 +20,7 @@ export const defaultTopCaption = {
   strokeWidth: 1,
   fontSize: 30,
   x: 150,
-  y: 50,
+  y: 40,
 };
 
 export const defaultBottomCaption = {
@@ -31,5 +31,5 @@ export const defaultBottomCaption = {
   strokeWidth: 1,
   fontSize: 30,
   x: 150,
-  y: 375,
+  y: 250,
 };

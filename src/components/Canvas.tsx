@@ -1,8 +1,10 @@
 import React from 'react';
 import { Stage, Layer, Image, Text } from 'react-konva';
 import Form from './Form';
-import { Meme, MemeImage, Captions } from '../types';
-import { Grid, useTheme } from '@mui/material';
+import { Meme, MemeImage, Captions, Caption } from '../types';
+import { Grid } from '@mui/material';
+import DraggableText from './DraggableText';
+
 export interface CanvasProps {
   memes: Meme[] | undefined;
   memeImage: MemeImage | undefined;
@@ -20,9 +22,23 @@ const Canvas: React.FC<CanvasProps> = ({
   setCaptions,
   selectRandomMeme,
 }) => {
-  const theme = useTheme();
+  const [width, setWidth] = React.useState(window.innerWidth);
+  const [height, setHeight] = React.useState(window.innerHeight);
+  const [selectedId, setSelectedId] = React.useState<string | undefined>(
+    undefined
+  );
   const layerRef = React.useRef(null);
   const stageRef = React.useRef(null);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', updateWidthAndHeight);
+    return () => window.removeEventListener('resize', updateWidthAndHeight);
+  });
+
+  const updateWidthAndHeight = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
 
   const handledownload = (event: any) => {
     event.preventDefault();
@@ -34,8 +50,24 @@ const Canvas: React.FC<CanvasProps> = ({
     link.click();
   };
 
+  const checkSelected = (event: any) => {
+    const clickedOnEmpty = event.target.index === 0;
+    if (clickedOnEmpty) {
+      setSelectedId(undefined);
+    }
+  };
+
+  let textArray: Caption[] = [];
+  React.useEffect(() => {
+    textArray.length = 0;
+    if (captions) {
+      textArray.push(captions.topCaption);
+      textArray.push(captions.bottomCaption);
+    }
+  }, [captions]);
+
   return (
-    <Grid container justifyContent='center'>
+    <Grid container justifyContent='center' spacing={2}>
       <Grid item xs={12} md={4}>
         <Form
           memes={memes}
@@ -54,16 +86,14 @@ const Canvas: React.FC<CanvasProps> = ({
         md={8}
         justifyContent='center'
         alignItems='center'
-        // style={{ overflowX: 'hidden' }}
       >
         <Stage
-          width={memeImage?.width}
-          height={
-            memeImage && (memeImage.height > 500 ? memeImage?.height : 500)
-          }
+          width={width > 600 ? width * 0.6 : width}
+          height={height > 600 ? height * 0.6 : 400}
           ref={stageRef}
+          onMouseDown={checkSelected}
+          onTouchStart={checkSelected}
           onContentMouseover
-          style={{ minHeight: '700px' }}
         >
           <Layer ref={layerRef}>
             <Image
@@ -71,18 +101,26 @@ const Canvas: React.FC<CanvasProps> = ({
               y={0}
               image={memeImage?.image}
               alt='meme-image'
-              width={memeImage?.width}
-              height={memeImage?.height}
+              width={width > 600 ? 600 : width}
+              height={height > 600 ? height * 0.6 : 400}
             />
-            <Text
-              {...captions?.topCaption}
-              fillAfterStrokeEnabled
-              strokeScaleEnabled={false}
+            <DraggableText
+              key={captions?.topCaption.id}
+              shapeProps={captions?.topCaption}
+              isSelected={captions?.topCaption.id === selectedId}
+              onSelect={() => setSelectedId(captions?.topCaption.id)}
+              onChange={(newAttrs: any) => {
+                textArray[0] = newAttrs;
+              }}
             />
-            <Text
-              {...captions?.bottomCaption}
-              fillAfterStrokeEnabled
-              strokeScaleEnabled={false}
+            <DraggableText
+              key={captions?.bottomCaption.id}
+              shapeProps={captions?.bottomCaption}
+              isSelected={captions?.bottomCaption.id === selectedId}
+              onSelect={() => setSelectedId(captions?.bottomCaption.id)}
+              onChange={(newAttrs: any) => {
+                textArray[1] = newAttrs;
+              }}
             />
           </Layer>
         </Stage>

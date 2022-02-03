@@ -24,7 +24,7 @@ const MemeComponent = () => {
     if (memes.length === 0) return;
     const randomMeme = memes[getRandomIndex(memes.length)];
     const image = new Image();
-    const maxHeight = Math.floor(window.innerHeight * 0.5);
+    const maxHeight = Math.floor(window.innerHeight);
     const { newWidth, newHeight } = getSize(
       randomMeme.width,
       randomMeme.height,
